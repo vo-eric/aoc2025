@@ -54,3 +54,5 @@ console.log(
     secondPart.map((id) => Number(id))
   )
 );
+
+console.log(part2(merged));
