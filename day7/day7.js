@@ -3,6 +3,29 @@ const { zstdCompress } = require('zlib');
 var input = fs.readFileSync('input.txt', 'utf8');
 var parsedInput = input.split(/\r?\n/);
 
+const part2 = (lines) => {
+  const grid = Array.from({ length: lines.length }, () =>
+    Array.from({ length: lines[0].length }, () => 0)
+  );
+
+  const startingColumn = lines[0].indexOf('S');
+  lines[0][startingColumn] = '^';
+  grid[0][startingColumn] = 1;
+
+  for (let i = 0; i < lines.length - 1; i++) {
+    const line = lines[i];
+    for (let j = 0; j < line.length; j++) {
+      if (line[j] === '^') {
+        grid[i + 1][j - 1] += grid[i][j];
+        grid[i + 1][j + 1] += grid[i][j];
+      } else {
+        grid[i + 1][j] += grid[i][j];
+      }
+    }
+  }
+  return grid[grid.length - 1].reduce((prev, curr) => prev + curr, 0);
+};
+
 const part1 = (lines) => {
   /**
    *
@@ -37,4 +60,4 @@ const part1 = (lines) => {
   return result;
 };
 
-console.log(part1(parsedInput));
+console.log(part2(parsedInput));
