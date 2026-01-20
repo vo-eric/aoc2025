@@ -15,40 +15,64 @@ const DIRS = [
 ];
 
 const part2 = (lines) => {
-  let res = 0;
-
-  // Convert strings to arrays of characters so we can modify them
   const grid = lines.map((line) => line.split(''));
+  let result = 0;
 
-  const part1 = () => {
-    let result = 0;
+  const removePaper = (lines) => {
+    let removed = 0;
 
-    for (let i = 0; i < grid.length; i++) {
-      const row = grid[i];
+    for (let i = 0; i < lines.length; i++) {
+      const row = lines[i];
 
       for (let j = 0; j < row.length; j++) {
-        if (grid[i][j] !== '@') {
+        if (lines[i][j] !== '@') {
           continue;
         }
 
-        const adjacents = countAdjacent(grid, i, j);
+        const adjacents = countAdjacent(lines, i, j);
 
         if (adjacents < 4) {
-          grid[i][j] = '.';
-          result++;
+          lines[i][j] = '.';
+          removed++;
         }
       }
     }
-
-    console.log('result', result);
-    return result;
+    return removed;
   };
 
-  while (part1() > 0) {
-    res += part1();
+  while (true) {
+    const paperRemoved = removePaper(grid);
+
+    if (paperRemoved === 0) {
+      break;
+    }
+    result += paperRemoved;
   }
 
-  return res;
+  return result;
+};
+
+const part1 = (lines) => {
+  let result = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    const row = lines[i];
+
+    for (let j = 0; j < row.length; j++) {
+      if (lines[i][j] !== '@') {
+        continue;
+      }
+
+      const adjacents = countAdjacent(lines, i, j);
+
+      if (adjacents < 4) {
+        lines[i][j] = '.';
+        result++;
+      }
+    }
+  }
+
+  return result;
 };
 
 const countAdjacent = (grid, row, col) => {
